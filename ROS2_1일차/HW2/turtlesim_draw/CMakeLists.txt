@@ -9,15 +9,12 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(turtlesim REQUIRED)  # turtlesim 의존성 추가
+find_package(turtlesim REQUIRED)  
 
-# 실행 파일 추가
 add_executable(turtlesim_draw_node src/turtlesim_draw_node.cpp)
 
-# 의존성 추가
 ament_target_dependencies(turtlesim_draw_node rclcpp geometry_msgs turtlesim)
 
-# 설치 경로 설정
 install(TARGETS
   turtlesim_draw_node
   DESTINATION lib/${PROJECT_NAME})

@@ -1,7 +1,7 @@
-#include "rclcpp/rclcpp.hpp"  // ROS2 RCLCPP 라이브러리 포함
-#include "geometry_msgs/msg/twist.hpp"  // Twist 메시지 포함
-#include <turtlesim/srv/set_pen.hpp>  // SetPen 서비스 포함
-#include <turtlesim/srv/teleport_absolute.hpp>  // TeleportAbsolute 서비스 포함
+#include "rclcpp/rclcpp.hpp"  
+#include "geometry_msgs/msg/twist.hpp"  
+#include <turtlesim/srv/set_pen.hpp>  
+#include <turtlesim/srv/teleport_absolute.hpp>  
 #include <chrono>
 #include <iostream>
 #include <string>
@@ -15,9 +15,9 @@ public:
     {
         publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("turtle1/cmd_vel", 10);
         timer_ = this->create_wall_timer(500ms, std::bind(&TurtlesimDraw::draw_shape, this));
-        init_msg();  // 메시지 초기화
+        init_msg();  // 메시지 초기화용 
 
-        // CLI 입력 처리
+        
         std::cout << "그릴 모양을 선택하세요 1: 사각형 2: 원 3: 삼각형";
         std::cin >> shape_choice_;
 
@@ -30,7 +30,6 @@ public:
         std::cout << "펜 두께를 입력하세요 ";
         std::cin >> pen_thickness_;
 
-        // 펜 설정
         set_pen(color_, pen_thickness_);
     }
 
@@ -43,7 +42,7 @@ private:
     std::string color_;
     int pen_thickness_;
 
-    void init_msg()  // 메시지 초기화 메소드
+    void init_msg()  
     {
         msg.linear.x = 0.0;
         msg.angular.z = 0.0;
@@ -54,11 +53,16 @@ private:
         auto client = this->create_client<turtlesim::srv::SetPen>("/turtle1/set_pen");
         auto request = std::make_shared<turtlesim::srv::SetPen::Request>();
 
-        if (color == "red") {
+        if (color == "red") 
+        {
             request->r = 255; request->g = 0; request->b = 0;
-        } else if (color == "green") {
+        } 
+        else if (color == "green") 
+        {
             request->r = 0; request->g = 255; request->b = 0;
-        } else if (color == "blue") {
+        } 
+        else if (color == "blue") 
+        {
             request->r = 0; request->g = 0; request->b = 255;
         }
 
@@ -115,7 +119,7 @@ private:
 
     void draw_circle(float radius) 
     {
-        for (int i = 0; i < 36; ++i)  // 한 바퀴를 36개의 작은 선분으로 나누어 원을 그림
+        for (int i = 0; i < 36; ++i)  
         {
             msg.linear.x = radius;
             msg.angular.z = 1.0;

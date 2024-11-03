@@ -1,0 +1,41 @@
+{
+  "python.autoComplete.extraPaths": [
+    "/home/kgh/robot_ws/build/yolo_segmentation",
+    "/home/kgh/robot_ws/install/yolo_segmentation/lib/python3.10/site-packages",
+    "/home/kgh/robot_ws/build/yolo_detection",
+    "/home/kgh/robot_ws/install/yolo_detection/lib/python3.10/site-packages",
+    "/home/kgh/robot_ws/build/video_to_ros2_topic",
+    "/home/kgh/robot_ws/install/video_to_ros2_topic/lib/python3.10/site-packages",
+    "/home/kgh/robot_ws/install/tutorial_interface/local/lib/python3.10/dist-packages",
+    "/home/kgh/robot_ws/build/image_to_ros2_topic",
+    "/home/kgh/robot_ws/install/image_to_ros2_topic/lib/python3.10/site-packages",
+    "/home/kgh/robot_ws/install/image_recognition_msgs/local/lib/python3.10/dist-packages",
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ],
+  "python.analysis.extraPaths": [
+    "/home/kgh/robot_ws/build/yolo_segmentation",
+    "/home/kgh/robot_ws/install/yolo_segmentation/lib/python3.10/site-packages",
+    "/home/kgh/robot_ws/build/yolo_detection",
+    "/home/kgh/robot_ws/install/yolo_detection/lib/python3.10/site-packages",
+    "/home/kgh/robot_ws/build/video_to_ros2_topic",
+    "/home/kgh/robot_ws/install/video_to_ros2_topic/lib/python3.10/site-packages",
+    "/home/kgh/robot_ws/install/tutorial_interface/local/lib/python3.10/dist-packages",
+    "/home/kgh/robot_ws/build/image_to_ros2_topic",
+    "/home/kgh/robot_ws/install/image_to_ros2_topic/lib/python3.10/site-packages",
+    "/home/kgh/robot_ws/install/image_recognition_msgs/local/lib/python3.10/dist-packages",
+    "/opt/ros/humble/lib/python3.10/site-packages",
+    "/opt/ros/humble/local/lib/python3.10/dist-packages"
+  ],
+  "files.associations": {
+    "*.repos": "yaml",
+    "*.world": "xml",
+    "*.xacro": "xml",
+    "qthread": "cpp",
+    "*.tcc": "cpp",
+    "fstream": "cpp",
+    "qmainwindow": "cpp",
+    "qstring": "cpp",
+    "qlabel": "cpp"
+  }
+}

@@ -21,14 +21,13 @@ TurtlesimCli::TurtlesimCli() : Node("turtlesim_cli_node")
 
     kill_client_ = this->create_client<turtlesim::srv::Kill>("/kill");
     spawn_client_ = this->create_client<turtlesim::srv::Spawn>("/spawn");
-        parameter_client_ = std::make_shared<rclcpp::AsyncParametersClient>(this, "turtlesim");  // 파라미터 클라이언트 초기화
-
 
     publisher_ = this->create_publisher<geometry_msgs::msg::Twist>("turtle1/cmd_vel", 10);
     set_pen_client_ = this->create_client<turtlesim::srv::SetPen>("/turtle1/set_pen");
     reset_client_ = this->create_client<std_srvs::srv::Empty>("/reset");
     clear_client_ = this->create_client<std_srvs::srv::Empty>("/clear");
     timer_ = this->create_wall_timer(100ms, std::bind(&TurtlesimCli::process_input, this));
+    parameter_client = std::make_shared<rclcpp::AsyncParametersClient>(this, "turtlesim");
     init_msg();
 }
 
@@ -124,7 +123,7 @@ int TurtlesimCli::get_color_value(const std::string &color_name)
         std::cout << color_name << " 값을 입력하세요 (0 ~ 255): ";
         std::cin >> value;
 
-        if (value >= 0 && value <= 255) 
+        if (value >= 0 && value <= 255)
         {
             break;
         }
@@ -158,92 +157,149 @@ int TurtlesimCli::get_pen_width()
 
 void TurtlesimCli::set_background_color()
 {
-
     int r = get_color_value("배경 R");
     int g = get_color_value("배경 G");
     int b = get_color_value("배경 B");
 
-    this->set_parameter(rclcpp::Parameter("background_r", r));
-    this->set_parameter(rclcpp::Parameter("background_g", g));
-    this->set_parameter(rclcpp::Parameter("background_b", b));
+    // 파라미터 클라이언트 생성 및 파라미터 설정 비동기 요청
 
-    auto request = std::make_shared<std_srvs::srv::Empty::Request>();
-    clear_client_->async_send_request(request,
-        [this](rclcpp::Client<std_srvs::srv::Empty>::SharedFuture response)
+    if (!this->parameter_client->wait_for_service(std::chrono::seconds(5))) 
+    {
+        std::cerr << "파라미터 서비스에 연결할 수 없습니다.\n";
+        return;
+    }
+
+    this->parameter_client->set_parameters(
         {
-            if (response.valid())
+            rclcpp::Parameter("background_r", r),
+            rclcpp::Parameter("background_g", g),
+            rclcpp::Parameter("background_b", b)
+        },
+        [this](const std::shared_future<std::vector<rcl_interfaces::msg::SetParametersResult>>& result) 
+        {
+            bool success = true;
+            for (const auto& res : result.get())
             {
-                std::cout << "배경색이 성공적으로 변경되었습니다." << std::endl;
+                if (!res.successful)
+                {
+                    success = false;
+                    break;
+                }
+            }
+
+            if (success)
+            {
+                // 파라미터 설정이 성공했을 때 clear 서비스 호출
+                auto request = std::make_shared<std_srvs::srv::Empty::Request>();
+                clear_client_->async_send_request(request,
+                    [this](rclcpp::Client<std_srvs::srv::Empty>::SharedFuture response)
+                    {
+                        if (response.valid())
+                        {
+                            std::cout << "배경색이 성공적으로 변경되었습니다." << std::endl;
+                        }
+                        else
+                        {
+                            std::cerr << "배경색 변경에 실패했습니다." << std::endl;
+                        }
+                    });
             }
             else
             {
-                std::cerr << "배경색 변경에 실패했습니다." << std::endl;
+                std::cerr << "배경색 설정에 실패했습니다." << std::endl;
             }
-        });
+        }
+    );
 }
 
-void TurtlesimCli::change_turtle_shape()
-{
-    // 사용자에게 선택 사항 안내 및 입력받기
-    std::cout << "\n1: ardent\n2: bouncy\n3: crystal\n4: dashing\n";
+
+void TurtlesimCli::change_turtle_shape() {
+    std::cout << "원하는 거북이 모양의 번호를 선택하세요:\n"
+                 "1: ardent 2: bouncy 3: crystal\n"
+                 "4: dashing 5: eloquent 6: foxy\n"
+                 "7: galactic 8: humble 9: rolling\n";
+
     int choice;
     std::cin >> choice;
 
-    // 선택에 따라 거북이 모양 설정 (기본값은 ardent)
     std::string turtle_name;
-    switch(choice) {
+    switch (choice) {
         case 1: turtle_name = "ardent"; break;
         case 2: turtle_name = "bouncy"; break;
         case 3: turtle_name = "crystal"; break;
         case 4: turtle_name = "dashing"; break;
+        case 5: turtle_name = "eloquent"; break;
+        case 6: turtle_name = "foxy"; break;
+        case 7: turtle_name = "galactic"; break;
+        case 8: turtle_name = "humble"; break;
+        case 9: turtle_name = "rolling"; break;
         default:
-            std::cerr << "잘못된 선택입니다. 기본값(ardent)으로 설정됩니다.\n";
-            turtle_name = "ardent";
+            std::cout << "잘못된 선택입니다. 기본 거북이로 설정됩니다.\n";
+            return;
     }
 
-    // 기존 거북이 삭제
+    // 1. 기존 거북이 삭제
     auto kill_request = std::make_shared<turtlesim::srv::Kill::Request>();
-    if (!kill_client_->wait_for_service(std::chrono::seconds(1))) {
-        std::cerr << "Kill 서비스에 연결할 수 없습니다.\n";
-        return;
-    }
-    auto kill_result = kill_client_->async_send_request(kill_request);
-    if (rclcpp::spin_until_future_complete(this->shared_from_this(), kill_result) != rclcpp::FutureReturnCode::SUCCESS) {
-        std::cerr << "기존 거북이를 삭제하는 데 실패했습니다.\n";
-        return;
-    }
-    std::cout << "기존 거북이 삭제 완료.\n";
+    kill_request->name = "turtle1";
+    kill_client_->async_send_request(kill_request, [this, turtle_name](rclcpp::Client<turtlesim::srv::Kill>::SharedFuture future) {
+        if (future.valid()) {
+            std::cout << "기존 거북이가 제거되었습니다.\n";
 
-    // 새 거북이 모양 파라미터 설정
-    auto parameter_client = std::make_shared<rclcpp::AsyncParametersClient>(this->shared_from_this(), "turtlesim");
-    if (!parameter_client->wait_for_service(std::chrono::seconds(5))) {
-        std::cerr << "파라미터 서비스에 연결할 수 없습니다.\n";
-        return;
-    }
-    auto set_param_result = parameter_client->set_parameters({rclcpp::Parameter("turtle_shape", turtle_name)});
-    if (rclcpp::spin_until_future_complete(this->shared_from_this(), set_param_result) != rclcpp::FutureReturnCode::SUCCESS) {
-        std::cerr << "거북이 모양 설정에 실패했습니다.\n";
-        return;
-    }
-    std::cout << "거북이 모양이 '" << turtle_name << "'으로 설정되었습니다.\n";
+            // 2. 파라미터 클라이언트 초기화 및 모양 설정
+            if (!parameter_client) {
+                parameter_client = std::make_shared<rclcpp::AsyncParametersClient>(this->shared_from_this(), "turtlesim");
+            }
 
-    // 새로운 거북이 생성
-    auto spawn_request = std::make_shared<turtlesim::srv::Spawn::Request>();
-    spawn_request->x = 5.5;        // 화면 중앙 X 좌표
-    spawn_request->y = 5.5;        // 화면 중앙 Y 좌표
-    spawn_request->theta = 0.0;    // 초기 방향
+            // 파라미터 서비스 준비 확인
+            if (!parameter_client->wait_for_service(std::chrono::seconds(10))) {
+                std::cerr << "파라미터 서비스에 연결할 수 없습니다.\n";
+                return;
+            }
 
-    if (!spawn_client_->wait_for_service(std::chrono::seconds(1))) {
-        std::cerr << "Spawn 서비스에 연결할 수 없습니다.\n";
-        return;
-    }
-    auto spawn_result = spawn_client_->async_send_request(spawn_request);
-    if (rclcpp::spin_until_future_complete(this->shared_from_this(), spawn_result) != rclcpp::FutureReturnCode::SUCCESS) {
-        std::cerr << "새 거북이 생성에 실패했습니다.\n";
-        return;
-    }
-    std::cout << "새로운 거북이가 생성되었습니다.\n";
+            // 파라미터 설정 요청
+            parameter_client->set_parameters({rclcpp::Parameter("turtle_shape", turtle_name)},
+            [this](const std::shared_future<std::vector<rcl_interfaces::msg::SetParametersResult>>& result) 
+            {
+                bool success = true;
+                std::string error_message;
+
+                for (const auto& res : result.get()) 
+                {
+                    if (!res.successful) {
+                        success = false;
+                        error_message = res.reason;  // 실패 이유 저장
+                        break;
+                    }
+                }
+
+                if (success) {
+                    std::cout << "거북이 모양이 설정되었습니다.\n";
+
+                    // 3. 새로운 거북이 생성 요청
+                    auto spawn_request = std::make_shared<turtlesim::srv::Spawn::Request>();
+                    spawn_request->x = 5.5;
+                    spawn_request->y = 5.5;
+                    spawn_request->theta = 0.0;
+                    spawn_request->name = "turtle1";
+
+                    spawn_client_->async_send_request(spawn_request, [this](rclcpp::Client<turtlesim::srv::Spawn>::SharedFuture response) {
+                        if (response.valid()) {
+                            std::cout << "새로운 거북이가 생성되었습니다.\n";
+                        } else {
+                            std::cerr << "새 거북이를 생성하는 데 실패했습니다.\n";
+                        }
+                    });
+                } else {
+                    std::cerr << "거북이 모양 설정에 실패했습니다: " << error_message << std::endl;
+                }
+            });
+        } else {
+            std::cerr << "기존 거북이를 삭제하는 데 실패했습니다.\n";
+        }
+    });
 }
+
+
 
 
 int main(int argc, char *argv[])

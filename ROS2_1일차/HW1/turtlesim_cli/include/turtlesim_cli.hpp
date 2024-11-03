@@ -31,7 +31,7 @@ private:
     rclcpp::Client<turtlesim::srv::Spawn>::SharedPtr spawn_client_;
     rclcpp::TimerBase::SharedPtr timer_;
     geometry_msgs::msg::Twist msg;
-    std::shared_ptr<rclcpp::AsyncParametersClient> parameter_client_; // 파라미터 클라이언트 추가
+    std::shared_ptr<rclcpp::AsyncParametersClient> parameter_client; // 파라미터 클라이언트 추가
 
     void init_msg();
     char get_key();

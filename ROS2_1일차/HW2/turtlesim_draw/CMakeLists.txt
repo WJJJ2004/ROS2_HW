@@ -15,7 +15,7 @@ find_package(turtlesim REQUIRED)
 include_directories(include)
 
 # add executable and source files
-add_executable(turtlesim_draw_node src/turtlesim_draw_node.cpp src/turtlesim_draw.cpp)
+add_executable(turtlesim_draw_node src/main.cpp src/turtlesim_draw.cpp)
 
 ament_target_dependencies(turtlesim_draw_node rclcpp geometry_msgs turtlesim)
 

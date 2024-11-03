@@ -24,7 +24,6 @@ private:
 
     void init_msg();
     void set_pen(const std::string& color, int thickness);
-    void teleport_turtle(double x, double y, double theta);
     void draw_shape();
     void draw_square(float size);
     void draw_circle(float radius);

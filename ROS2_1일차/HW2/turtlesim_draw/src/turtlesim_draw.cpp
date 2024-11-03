@@ -1,7 +1,7 @@
 #include "turtlesim_draw.hpp"
 #include <iostream>
 #include <thread>
-#include <cmath>
+
 
 using namespace std::chrono_literals;
 
@@ -54,15 +54,6 @@ void TurtlesimDraw::set_pen(const std::string& color, int thickness)
     client->async_send_request(request);
 }
 
-void TurtlesimDraw::teleport_turtle(double x, double y, double theta) 
-{
-    auto client = this->create_client<turtlesim::srv::TeleportAbsolute>("/turtle1/teleport_absolute");
-    auto request = std::make_shared<turtlesim::srv::TeleportAbsolute::Request>();
-    request->x = x;
-    request->y = y;
-    request->theta = theta;
-    client->async_send_request(request);
-}
 
 void TurtlesimDraw::draw_shape() 
 {

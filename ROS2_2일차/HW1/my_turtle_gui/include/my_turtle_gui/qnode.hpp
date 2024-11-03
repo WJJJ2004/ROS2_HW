@@ -52,6 +52,7 @@ private:
     rclcpp::Client<turtlesim::srv::SetPen>::SharedPtr set_pen_client;
     rclcpp::Client<turtlesim::srv::TeleportAbsolute>::SharedPtr teleport_client;
     rclcpp::Client<std_srvs::srv::Empty>::SharedPtr clear_client;
+    std::shared_ptr<rclcpp::AsyncParametersClient> parameter_client;
 };
 
 #endif /* MY_TURTLE_GUI_QNODE_HPP_ */

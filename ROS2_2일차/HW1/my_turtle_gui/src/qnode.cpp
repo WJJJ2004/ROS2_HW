@@ -16,6 +16,8 @@ QNode::QNode()
     set_pen_client = node->create_client<turtlesim::srv::SetPen>("/turtle1/set_pen");
     teleport_client = node->create_client<turtlesim::srv::TeleportAbsolute>("/turtle1/teleport_absolute");
     clear_client = node->create_client<std_srvs::srv::Empty>("/clear");
+    parameter_client = std::make_shared<rclcpp::AsyncParametersClient>(node, "turtlesim");
+
     this->start();
 }
 
@@ -97,8 +99,56 @@ void QNode::setPen()
 
 void QNode::setBackground()
 {
-    auto request = std::make_shared<std_srvs::srv::Empty::Request>();
-    clear_client->async_send_request(request);
+    if (!parameter_client->wait_for_service(std::chrono::seconds(5)))
+    {
+        std::cerr << "파라미터 서비스에 연결할 수 없습니다.\n";
+        return;
+    }
+
+    // 배경색 파라미터 설정
+    parameter_client->set_parameters(
+        {
+            rclcpp::Parameter("background_r", 0),
+            rclcpp::Parameter("background_g", 255),
+            rclcpp::Parameter("background_b", 0)
+        },
+        [this](const std::shared_future<std::vector<rcl_interfaces::msg::SetParametersResult>>& result)
+        {
+            bool success = true;
+            for (const auto& res : result.get())
+            {
+                if (!res.successful)
+                {
+                    success = false;
+                    break;
+                }
+            }
+
+            if (success)
+            {
+                // 설정 성공 시 clear 서비스 호출
+                auto request = std::make_shared<std_srvs::srv::Empty::Request>();
+                clear_client->async_send_request(
+                    request,
+                    [this](rclcpp::Client<std_srvs::srv::Empty>::SharedFuture response)
+                    {
+                        if (response.valid())
+                        {
+                            std::cout << "배경색이 성공적으로 변경되었습니다." << std::endl;
+                        }
+                        else
+                        {
+                            std::cerr << "배경색 변경에 실패했습니다." << std::endl;
+                        }
+                    }
+                    );
+            }
+            else
+            {
+                std::cerr << "배경색 설정에 실패했습니다." << std::endl;
+            }
+        }
+        );
 }
 
 void QNode::setTurtleType()

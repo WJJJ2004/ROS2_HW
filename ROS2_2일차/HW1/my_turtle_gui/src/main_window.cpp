@@ -15,10 +15,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(qnode, &QNode::messageToUI, this, &MainWindow::logMessage);
 
     // // logTextEdit를 UI의 특정 위치에 추가 (예: 수직 레이아웃에 추가)
-    // logTextEdit = new QTextEdit(this);
-    // logTextEdit->setReadOnly(true);
-
-    ui->logTextEdit->setReadOnly(true);
+    logTextEdit = new QTextEdit(this);
+    logTextEdit->setReadOnly(true);
 
     qnode->start();
 }

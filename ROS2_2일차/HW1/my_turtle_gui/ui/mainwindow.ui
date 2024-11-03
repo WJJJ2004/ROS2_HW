@@ -102,7 +102,7 @@
      <item row="0" column="3">
       <widget class="QPushButton" name="Set_Pen">
        <property name="text">
-        <string>Set Pen</string>
+        <string>Set Pen RED</string>
        </property>
       </widget>
      </item>

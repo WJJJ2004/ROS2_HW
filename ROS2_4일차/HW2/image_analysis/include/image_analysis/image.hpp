@@ -1,18 +1,18 @@
-#ifndef IMAGE_ANALYSIS_MAIN_WINDOW_H
-#define IMAGE_ANALYSIS_MAIN_WINDOW_H
+#ifndef IMAGE_ANALYSIS_IMAGE_H
+#define IMAGE_ANALYSIS_IMAGE_H
 
 #include <QMainWindow>
 #include <QCloseEvent>
 #include <QLabel>
-#include "qnode.hpp"
-#include "ui_mainwindow.h"
+#include "image_node.hpp"
+#include "ui_image.h"
 
-class MainWindow : public QMainWindow {
+class image : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget* parent = nullptr);
-    ~MainWindow();
+    image(QWidget* parent = nullptr);
+    ~image();
 
 private slots:
     // 이미지 업데이트 슬롯
@@ -34,4 +34,4 @@ private:
     void closeEvent(QCloseEvent* event);
 };
 
-#endif  // IMAGE_ANALYSIS_MAIN_WINDOW_H
+#endif

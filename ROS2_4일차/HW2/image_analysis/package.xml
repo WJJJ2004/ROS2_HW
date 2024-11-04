@@ -3,7 +3,7 @@
   <name>image_analysis</name>
   <version>0.1.0</version>
   <description>
-    Image analysis node using ROS2 and OpenCV.
+    Image analysis node using ROS2, OpenCV, and Qt5 for GUI support.
   </description>
 
   <maintainer email="author@mail.com">author</maintainer>
@@ -18,6 +18,12 @@
   <depend>sensor_msgs</depend>
   <depend>OpenCV</depend>
   <depend>cv_bridge</depend>  <!-- cv_bridge 의존성 추가 -->
+  <depend>Boost</depend>      <!-- Boost 라이브러리 추가 -->
+  <depend>qtbase5-dev</depend>   <!-- Qt 기본 컴포넌트 의존성 -->
+  <depend>qt5-qmake</depend>     <!-- Qt 빌드 도구 의존성 -->
+  <depend>libqt5widgets5</depend> <!-- Qt Widgets 의존성 -->
+  <depend>libqt5gui5</depend>     <!-- Qt GUI 의존성 -->
+  <depend>libqt5network5</depend> <!-- Qt Network 의존성 -->
 
   <!-- 테스트 의존성 -->
   <test_depend>ament_lint_auto</test_depend>
@@ -27,3 +33,4 @@
     <build_type>ament_cmake</build_type>
   </export>
 </package>
+

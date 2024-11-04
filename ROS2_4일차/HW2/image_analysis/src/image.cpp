@@ -1,8 +1,8 @@
-#include "../include/image_analysis/main_window.hpp"
+#include "../include/image_analysis/image.hpp"
 #include <QImage>
 #include <QPixmap>
 
-MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWindowDesign) {
+image::image(QWidget* parent) : image(parent), ui(new Ui::MainWindowDesign) {
     ui->setupUi(this);
 
     QIcon icon("://ros-icon.png");
@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     bo_label = findChild<QLabel*>("bo");
 }
 
-void MainWindow::updateImageOnLabel(const QImage &image, const QString &label_name)
+void image::updateImageOnLabel(const QImage &image, const QString &label_name)
 {
     QLabel *target_label = nullptr;
 
@@ -59,12 +59,12 @@ void MainWindow::updateImageOnLabel(const QImage &image, const QString &label_na
     }
 }
 
-void MainWindow::closeEvent(QCloseEvent* event)
+void image::closeEvent(QCloseEvent* event)
 {
     QMainWindow::closeEvent(event);
 }
 
-MainWindow::~MainWindow()
+image::~image()
 {
     delete ui;
 }

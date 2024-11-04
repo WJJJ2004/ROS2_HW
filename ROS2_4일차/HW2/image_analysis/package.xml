@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>image_analysis</name>
+  <version>0.1.0</version>
+  <description>
+    Image analysis node using ROS2 and OpenCV.
+  </description>
+
+  <maintainer email="author@mail.com">author</maintainer>
+  <author>author</author>
+  <license>BSD</license>
+
+  <!-- 빌드 도구 의존성 -->
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- 실행 의존성 -->
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>OpenCV</depend>
+  <depend>cv_bridge</depend>  <!-- cv_bridge 의존성 추가 -->
+
+  <!-- 테스트 의존성 -->
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

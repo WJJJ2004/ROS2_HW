@@ -1,0 +1,29 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/jammay/robot_ws/install/turtlebot3_gazebo/include/**",
+        "/home/jammay/robot_ws/install/turtlebot3_fake_node/include/**",
+        "/home/jammay/robot_ws/install/image_recognition_msgs/include/**",
+        "/opt/ros/humble/include/**",
+        "/home/jammay/robot_ws/src/cam_params_pkg/include/**",
+        "/home/jammay/robot_ws/src/image_recognition/image_projection/dual_fisheye_camera/include/**",
+        "/home/jammay/robot_ws/src/image_recognition/image_projection/pan_tilt_camera/include/**",
+        "/home/jammay/robot_ws/src/image_recognition/image_projection/usb_camera/include/**",
+        "/home/jammay/robot_ws/src/turtlebot3_simulations_for_intern/turtlebot3_fake_node/include/**",
+        "/home/jammay/robot_ws/src/turtlebot3_simulations_for_intern/turtlebot3_gazebo/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

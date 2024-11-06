@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 #include <QThread>
+#include <QTimer>
+#include <QMap>
 #include "ui_mainwindow.h"
 #include "parameter_node.hpp"
 
@@ -73,6 +75,12 @@ private:
     Ui::MainWindowDesign* ui;
     ParameterImgNode* parameterImgNode;
     void closeEvent(QCloseEvent* event);
+    // 디바운싱을 위한 QTimer 맵
+    QMap<QString, QTimer*> debounceTimers;
+
+    // 디바운싱 적용 메서드
+    void updateParameterWithDebounce(const QString &paramName, int value);
+
 };
 
 #endif  // OBJECT_FINDER_MAIN_WINDOW_H

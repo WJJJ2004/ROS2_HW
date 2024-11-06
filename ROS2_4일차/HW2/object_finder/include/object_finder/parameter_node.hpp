@@ -1,5 +1,5 @@
-#ifndef CAM_PARAMS_PKG_PARAMETER_IMG_NODE_H
-#define CAM_PARAMS_PKG_PARAMETER_IMG_NODE_H
+#ifndef OBJECT_FINDER_MAIN_WINDOW_NODE_H
+#define OBJECT_FINDER_MAIN_WINDOW_NODE_H
 
 #include <QThread>
 #include <rclcpp/rclcpp.hpp>
@@ -21,6 +21,7 @@ protected:
 private:
   rclcpp::Node::SharedPtr node_;
   std::shared_ptr<rclcpp::AsyncParametersClient> parameters_client_;
+  std::mutex mutex_;
 };
 
 #endif  // CAM_PARAMS_PKG_PARAMETER_IMG_NODE_H

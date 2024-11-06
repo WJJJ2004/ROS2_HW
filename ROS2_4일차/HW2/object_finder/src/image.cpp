@@ -36,22 +36,24 @@ void SecondWindow::initializeLabels()
 
 void SecondWindow::updateLabel(const QString &labelName, const QImage &image)
 {
+    // QImage를 QPixmap으로 변환하고, 각 라벨의 크기에 맞추면서 비율 유지
     QPixmap pixmap = QPixmap::fromImage(image);
 
-    // 전달된 라벨 이름에 따라 특정 라벨에 이미지 설정
+    // 전달된 라벨 이름에 따라 특정 라벨에 이미지 설정 (비율 유지)
     if (labelName == "USB_CAM")
-        ui->USB_CAM->setPixmap(pixmap);
+        ui->USB_CAM->setPixmap(pixmap.scaled(ui->USB_CAM->size(), Qt::KeepAspectRatio));
     else if (labelName == "Find_object")
-        ui->Find_object->setPixmap(pixmap);
+        ui->Find_object->setPixmap(pixmap.scaled(ui->Find_object->size(), Qt::KeepAspectRatio));
     else if (labelName == "ROI")
-        ui->ROI->setPixmap(pixmap);
+        ui->ROI->setPixmap(pixmap.scaled(ui->ROI->size(), Qt::KeepAspectRatio));
     else if (labelName == "Binary_white")
-        ui->Binary_white->setPixmap(pixmap);
+        ui->Binary_white->setPixmap(pixmap.scaled(ui->Binary_white->size(), Qt::KeepAspectRatio));
     else if (labelName == "Binary_orange")
-        ui->Binary_orange->setPixmap(pixmap);
+        ui->Binary_orange->setPixmap(pixmap.scaled(ui->Binary_orange->size(), Qt::KeepAspectRatio));
     else if (labelName == "Binary_Lime")
-        ui->Binary_Lime->setPixmap(pixmap);
+        ui->Binary_Lime->setPixmap(pixmap.scaled(ui->Binary_Lime->size(), Qt::KeepAspectRatio));
 }
+
 
 void SecondWindow::closeEvent(QCloseEvent* event)
 {
@@ -61,6 +63,7 @@ void SecondWindow::closeEvent(QCloseEvent* event)
         processImgNode->wait();
         delete processImgNode;
     }
+
     QMainWindow::closeEvent(event);
 }
 

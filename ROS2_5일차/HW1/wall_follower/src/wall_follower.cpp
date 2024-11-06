@@ -29,17 +29,17 @@ void WallFollower::scan_callback(const sensor_msgs::msg::LaserScan::SharedPtr ms
     if (std::isinf(front_distance) || front_distance > front_end)
     {
         cmd_vel_msg.linear.x = 0.0;
-        cmd_vel_msg.angular.z = -0.5;
+        cmd_vel_msg.angular.z = -0.3;
     }
     else if (left_distance < left_end)
     {
         cmd_vel_msg.linear.x = 0.0;
-        cmd_vel_msg.angular.z = -0.2;
+        cmd_vel_msg.angular.z = -0.3;
     }
     else if (front_left_distance < left_front_end)
     {
         cmd_vel_msg.linear.x = 0.0;
-        cmd_vel_msg.angular.z = -0.2;
+        cmd_vel_msg.angular.z = -0.3;
     }
     else
     {

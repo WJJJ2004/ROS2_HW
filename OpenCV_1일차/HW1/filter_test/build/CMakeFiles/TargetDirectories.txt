@@ -1,0 +1,3 @@
+/home/lwj/filter_test/build/CMakeFiles/filter.dir
+/home/lwj/filter_test/build/CMakeFiles/edit_cache.dir
+/home/lwj/filter_test/build/CMakeFiles/rebuild_cache.dir

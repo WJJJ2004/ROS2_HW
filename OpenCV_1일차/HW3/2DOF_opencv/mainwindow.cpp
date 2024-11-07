@@ -4,10 +4,7 @@
 #include <QPainter>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
-    , targetX(150)  // 초기 목표 좌표 설정
-    , targetY(100)
+    : QMainWindow(parent), ui(new Ui::MainWindow), targetX(150), targetY(100)
 {
     ui->setupUi(this);
 
@@ -18,34 +15,38 @@ MainWindow::MainWindow(QWidget *parent)
     timer->start(30);  // 30ms마다 updateImage 호출
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow() 
+{
     delete ui;
 }
 
-void MainWindow::paintEvent(QPaintEvent *event) {
+void MainWindow::paintEvent(QPaintEvent *event) 
+{
     QPainter painter(this);
     QImage qimg(img.data, img.cols, img.rows, img.step, QImage::Format_BGR888);
     painter.drawImage(0, 0, qimg);
 }
 
-void MainWindow::updateImage() {
+void MainWindow::updateImage() 
+{
     img = cv::Mat::zeros(400, 400, CV_8UC3);  // 이미지 초기화
 
     // 목표 좌표값에 따라 각도 계산
     double theta1, theta2;
     calculateAngles(targetX, targetY, theta1, theta2);
 
-    // 로봇 팔 그리기
     drawRobotArm(img, theta1, theta2);
 
     update();  // paintEvent를 호출하여 화면 갱신
 }
 
-void MainWindow::calculateAngles(double x, double y, double &theta1, double &theta2) {
+void MainWindow::calculateAngles(double x, double y, double &theta1, double &theta2) 
+{
     double distance = sqrt(x * x + y * y);
 
     // 주어진 좌표가 로봇 팔이 도달 가능한지 확인
-    if (distance > L1 + L2 || distance < abs(L1 - L2)) {
+    if (distance > L1 + L2 || distance < abs(L1 - L2)) 
+    {
         theta1 = 0;
         theta2 = 0;
         return;
@@ -56,7 +57,8 @@ void MainWindow::calculateAngles(double x, double y, double &theta1, double &the
     theta1 = atan2(y, x) - atan2(L2 * sin(theta2), L1 + L2 * cos(theta2));
 }
 
-void MainWindow::drawRobotArm(cv::Mat &img, double theta1, double theta2) {
+void MainWindow::drawRobotArm(cv::Mat &img, double theta1, double theta2) 
+{
     cv::Point base(200, 200);  // 기준점 설정
     cv::Point joint1(base.x + L1 * cos(theta1), base.y + L1 * sin(theta1));
     cv::Point endEffector(joint1.x + L2 * cos(theta1 + theta2), joint1.y + L2 * sin(theta1 + theta2));

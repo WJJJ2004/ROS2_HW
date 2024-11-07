@@ -4,7 +4,8 @@
 #include <iostream>
 
 // 색상 범위를 설정하는 함수
-cv::Mat getMask(const cv::Mat& image, cv::Scalar lower, cv::Scalar upper) {
+cv::Mat getMask(const cv::Mat& image, cv::Scalar lower, cv::Scalar upper) 
+{
     cv::Mat hsv, mask;
     cv::cvtColor(image, hsv, cv::COLOR_BGR2HSV);
     cv::inRange(hsv, lower, upper, mask);
@@ -12,11 +13,14 @@ cv::Mat getMask(const cv::Mat& image, cv::Scalar lower, cv::Scalar upper) {
 }
 
 // 객체 검출 및 바운딩 박스 그리기 함수
-void detectAndLabel(const cv::Mat& image, const cv::Mat& mask, const std::string& label, cv::Scalar boxColor) {
+void detectAndLabel(const cv::Mat& image, const cv::Mat& mask, const std::string& label, cv::Scalar boxColor) 
+{
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(mask, contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
-    for (size_t i = 0; i < contours.size(); i++) {
-        if (cv::contourArea(contours[i]) > 100) { // 최소 면적 필터링
+    for (size_t i = 0; i < contours.size(); i++) 
+    {
+        if (cv::contourArea(contours[i]) > 100)  		// 최소 면적 검사하기  
+        { 
             cv::Rect boundingBox = cv::boundingRect(contours[i]);
             cv::rectangle(image, boundingBox, boxColor, 2);
             cv::putText(image, label, boundingBox.tl(), cv::FONT_HERSHEY_SIMPLEX, 0.5, boxColor, 2);

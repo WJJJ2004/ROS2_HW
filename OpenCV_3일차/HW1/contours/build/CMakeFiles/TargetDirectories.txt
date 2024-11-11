@@ -1,0 +1,3 @@
+/home/lwj/contours/build/CMakeFiles/contours.dir
+/home/lwj/contours/build/CMakeFiles/edit_cache.dir
+/home/lwj/contours/build/CMakeFiles/rebuild_cache.dir
